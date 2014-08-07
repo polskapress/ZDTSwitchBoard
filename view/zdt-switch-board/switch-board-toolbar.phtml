@@ -1,0 +1,89 @@
+<style>
+  label {
+    color: #fff;
+  }
+
+  
+</style>
+<div class="zdt-toolbar-entry">
+    <div class="zdt-toolbar-preview">
+        <img width="12" height="12" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAADyElEQVRIDa1VS0hVXRT+jl7t/j5SxNfAFyGCKDkR8Vcv5CChpFGBUY5CMYiQMqlRwoXib+DEhN9UnAmB6cDIgW9xkCJmIoIv9IoWelFQUHHkaX+rs4/Hm7cctOCcvfZaa3/f2WutvY8x+OV719He1h1cUPyrX15UVVW9uWA4XAS/eiUO6enpF1rzEfhPBdoEra2tTw3DaAxcrGxv1Ie8cNFB8M8+apaY1mhQMbQV/2bYqq0QXAHZc620t7c/V/pPAhovuwHBVS9CmuplqBdtPW1ejI2NYWhoiKG/yMHBARQRoqKicHh4eMYvO6Al+pJld3w01bevnmFmZgYNDQ1WwK+DBqcnMjISR0dHdpBNEHXJQnYQvH75DI2Njejt7UVuvsdedJ7CLycRRY/UbYKIcAP1Tx4jMzMTNY9qMTs9KeB1dXW4fuOWoxJcdlampqbOGhwzm+C19yWam5vFFR8fj46ODqSlpaG8vBxuiXJszQFAtbCw0Lbor19ZWRFbiPZ4vV7U1NQgLi4OlZWVGB4eRlZWFkqvXbOqf9pNeo0eCbq5uSmp2djYOJMim4Dt0tLyP5qamoSEi8vKylQ3qU4SbO4guKSmpoLg3LXeBaPtFOkk37t3Hzs7O1LY+vp6C9FUnfQVq6ur2N/fR2dn53ZSUtK4qlfHwMCAxBCc52l9fR0ZGRnWOieBmAzFDtTW1spDE3PJNk1OTkZ2drb0ujInqq65PT09fVsRyUp9EzjB6XDt+L7e/TiC9xIV8DIOv8l28/PzBTg6OhphYWEwTROhoaFCODIygsnJSZycnASs/jkNWjmfz3dzYmLiU1FRESIiIjA/Py+neWtrS3ZTWlqKkpISQenp6UFeXp4Qa5bR0VFUV1cbpzXQHmtUqXmQkpKCkJAQzM3Noa+vT7qKadrb20NXV5dEkiQnJwd+vx8JCQkBKMBpFwW4tre3PTwPMTExGB8fF3Cmh/Xgs7a2BqaHojsoAEKmQQmOj48TeXm5XC4wLbGxsVhaWpKvVz65b2inMIW88M6ToClyu91+lZ7E8PBw7O7uQnWMHD7eOWxFFpk7pPByIwkP24VlcHDww8LCgmoY01RFNIuLi02VLlORypibmyt2+hk3OztL1Za2trbfn0x2UXd3t72AJBUVFWZBQYGMnGthnOoqAspD+x8JuFVV3BZ1J2mcc0f6l5eXxUcCLZogaJFJ4PF4HqrOecc+X1xctH8kzDnntLO4vOIpClxG5yvoQXMGMV08F2xddhcbQN9F/f39/6jL7YMznrqyyU8/0P7X5z8AUSXhtCY/rOgAAAAASUVORK5CYII=" alt="Switch Board">
+
+        <span class="zdt-toolbar-info">
+            SwitchBoard     
+        </span>
+    </div>
+    <div class="zdt-toolbar-detail">
+        <span class="zdt-toolbar-info zdt-toolbar-info-redundant">
+            <span class="zdt-detail-label">SwitchBoard</span>
+        </span>
+        <div class="zdt-toolbar-info">
+        <form action="" name="zdt_switch_board" method="post">
+            <a href="">reload</a>
+            <?php foreach ($collector->getSwitches() as $name => $value) { ?>
+                <div>
+                    <label class="zdt-detail-pre">
+                        <input type="checkbox" name="<?php echo $name ?>" <?php echo $value ? 'checked="checked"' : '' ?>>
+                        <?php echo $name ?>
+                    </label>
+                </div>
+            <?php } ?>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+    var form = document.querySelector('form[name=zdt_switch_board]'),
+        key = "<?php echo $collector->getCookieKey() ?>";
+    form.addEventListener('click', function (event) {
+        if (event.target.tagName !== 'INPUT') {
+            return false;
+        }
+        if (!key) {
+            throw new Error('No key provided for ZDTSwitchBoard config');
+        }
+        var config = getCookie(key),
+            prop = event.target.name,
+            value = !!event.target.checked;
+
+        console.warn(config);
+        config = config ? JSON.parse(config) : {};
+
+        console.log(config);
+        config[prop] = value;
+        console.log(config);
+
+        var now = (new Date()).getTime(),
+            expire = new Date(now + 60 * 60 * 60 * 24).toGMTString();
+        console.log(expire);
+
+        var value = [key, '=', JSON.stringify(config), '; expires=', expire, '; path=/'].join('');
+        console.log(value);
+        document.cookie = value;
+
+    }, false);
+
+    form.querySelector('a').addEventListener('click', function() {
+        window.location.reload();
+        return false;
+    });
+
+    function getCookie(name) {
+        var arr = document.cookie.split(';'),
+            tmp = {};
+
+        for (var i = 0; i < arr.length; i++) {
+            var keyvalue = arr[i].split('=');
+            tmp[keyvalue[0]] = keyvalue[1];
+        }
+
+        if (name) {
+            console.info(tmp);
+            return tmp[name] || '';
+        }
+
+        return tmp;
+    }
+})();
+</script>
