@@ -11,6 +11,12 @@ class SwitchBoardOptions extends AbstractOptions
         return $this;
     }
 
+    public function setSwitch($name, $value)
+    {
+        $this->switches[$name] = $value;
+        return $this;
+    }
+
     public function setCookieKey($string)
     {
         $this->cookieKey = $string;

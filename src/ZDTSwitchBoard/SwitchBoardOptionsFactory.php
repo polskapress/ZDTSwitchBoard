@@ -12,7 +12,7 @@ class SwitchBoardOptionsFactory implements FactoryInterface
     {
         $config = $serviceLocator->get('config');
 
-        if (isset(Module::CONFIG_KEY)) {
+        if (isset($config[Module::CONFIG_KEY])) {
             return new SwitchBoardOptions($config[Module::CONFIG_KEY]);
         }
 

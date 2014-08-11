@@ -3,10 +3,13 @@ return array(
 
     'service_manager' => array(
         'invokables' => array(
-            'switch-board' => 'ZDTSwitchBoard\Collector\SwitchBoardCollector',
+            'ZDTSwitchBoard\Collector\SwitchBoardCollector' => 'ZDTSwitchBoard\Collector\SwitchBoardCollector',
         ),
         'factories' => array(
             'ZDTSwitchBoard\SwitchBoardOptions' => 'ZDTSwitchBoard\SwitchBoardOptionsFactory',
+        ),
+        'aliases' => array(
+            'switch-board' => 'ZDTSwitchBoard\Collector\SwitchBoardCollector',
         ),
     ),
 
@@ -36,4 +39,6 @@ return array(
             // 'switchName' => value,
         ),
     ),
+
 );
+

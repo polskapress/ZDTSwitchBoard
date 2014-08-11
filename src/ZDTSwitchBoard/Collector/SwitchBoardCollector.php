@@ -8,6 +8,8 @@ use Zend\Session\Container;
 
 use ZendDeveloperTools\Collector\AbstractCollector;
 
+use Zend\EventManager\EventManager;
+
 use ZDTSwitchBoard\Module;
 
 class SwitchBoardCollector extends AbstractCollector
@@ -36,19 +38,19 @@ class SwitchBoardCollector extends AbstractCollector
      */
     public function collect(MvcEvent $mvcEvent)
     {
-        $application = $mvcEvent->getApplication();
-        if (!$application) {
-            return;
-        }
+        return null;
+    }
 
-        $serviceLocator = $application->getServiceManager();
+    public function updateOptions($event)
+    {
+        $serviceLocator = $event->getParam('ServiceManager');
+        $request = $serviceLocator->get('Request');
 
         if ($serviceLocator->has('Config')) {
             $this->data = $serviceLocator->get('config');
             $this->data = $this->data[Module::CONFIG_KEY];
         }
 
-        $request = $mvcEvent->getRequest();
         $cookies = $request->getCookie();
 
         if (!isset($cookies[$this->cookieKey])) {
@@ -63,6 +65,9 @@ class SwitchBoardCollector extends AbstractCollector
 
         $options = $serviceLocator->get('ZDTSwitchBoard\SwitchBoardOptions');
         $options->setFromArray($this->data);
+
+        $eventManager = new EventManager(__CLASS__);
+        $eventManager->trigger('updateOptions', null, array('options' => $options, 'serviceLocator' => $serviceLocator));
     }
 
     public function getCookieKey()
