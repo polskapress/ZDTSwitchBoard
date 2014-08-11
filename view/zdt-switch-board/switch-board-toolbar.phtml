@@ -36,38 +36,36 @@
 (function () {
     var form = document.querySelector('form[name=zdt_switch_board]'),
         key = "<?php echo $collector->getCookieKey() ?>";
-    form.addEventListener('click', function (event) {
-        if (event.target.tagName !== 'INPUT') {
-            return false;
-        }
-        if (!key) {
-            throw new Error('No key provided for ZDTSwitchBoard config');
-        }
-        var config = getCookie(key),
-            prop = event.target.name,
-            value = !!event.target.checked;
-
-        console.warn(config);
-        config = config ? JSON.parse(config) : {};
-
-        console.log(config);
-        config[prop] = value;
-        console.log(config);
-
-        var now = (new Date()).getTime(),
-            expire = new Date(now + 60 * 60 * 60 * 24).toGMTString();
-        console.log(expire);
-
-        var value = [key, '=', JSON.stringify(config), '; expires=', expire, '; path=/'].join('');
-        console.log(value);
-        document.cookie = value;
-
-    }, false);
 
     form.querySelector('a').addEventListener('click', function() {
         window.location.reload();
         return false;
     });
+
+    form.addEventListener('click', function (event) {
+        if (event.target.tagName !== 'INPUT') {
+            return false;
+        }
+
+        if (!key) {
+            throw new Error('No key provided for ZDTSwitchBoard config');
+        }
+
+        var config = getCookie(key),
+            prop = event.target.name,
+            value = !!event.target.checked;
+
+        config = config ? JSON.parse(config) : {};
+
+        config[prop] = value;
+
+        var now = (new Date()).getTime(),
+            expire = new Date(now + 60 * 60 * 60 * 24).toGMTString();
+
+        var value = [key, '=', JSON.stringify(config), '; expires=', expire, '; path=/'].join('');
+        document.cookie = value;
+
+    }, false);
 
     function getCookie(name) {
         var arr = document.cookie.split('; '),
