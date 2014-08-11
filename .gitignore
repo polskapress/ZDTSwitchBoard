@@ -5,3 +5,6 @@ demos/
 extras/documentation
 
 *.swp
+
+/vendor/
+composer.phar

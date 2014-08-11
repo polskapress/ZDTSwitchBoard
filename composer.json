@@ -1,0 +1,14 @@
+{
+    "name": "countless-integers/zdt-switch-board",
+    "description": "add custom switches to zdt toolbar",
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "countless-integers",
+            "email": "totcha@gazeta.pl"
+        }
+    ],
+    "require": {
+
+    }
+}
