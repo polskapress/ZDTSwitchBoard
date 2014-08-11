@@ -9,6 +9,11 @@
         }
     ],
     "require": {
-
+        "zendframework/zend-developer-tools": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "ZDTSwitchBoard\\": "src/"
+        }
     }
 }

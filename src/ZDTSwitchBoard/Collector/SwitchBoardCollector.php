@@ -63,7 +63,7 @@ class SwitchBoardCollector extends AbstractCollector
 
         $this->data['switches'] = array_replace_recursive($switches, array_intersect_key($data, $switches));
 
-        $options = $serviceLocator->get('ZDTSwitchBoard\SwitchBoardOptions');
+        $options = $serviceLocator->get('ZDTSwitchBoard\Options\SwitchBoardOptions');
         $options->setFromArray($this->data);
 
         $eventManager = new EventManager(__CLASS__);

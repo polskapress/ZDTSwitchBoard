@@ -1,5 +1,6 @@
 <?php
-namespace ZDTSwitchBoard;
+
+namespace ZDTSwitchBoard\Options;
 
 use Zend\Stdlib\AbstractOptions;
 

@@ -6,7 +6,7 @@ return array(
             'ZDTSwitchBoard\Collector\SwitchBoardCollector' => 'ZDTSwitchBoard\Collector\SwitchBoardCollector',
         ),
         'factories' => array(
-            'ZDTSwitchBoard\SwitchBoardOptions' => 'ZDTSwitchBoard\SwitchBoardOptionsFactory',
+            'ZDTSwitchBoard\Options\SwitchBoardOptions' => 'ZDTSwitchBoard\Options\SwitchBoardOptionsFactory',
         ),
         'aliases' => array(
             'switch-board' => 'ZDTSwitchBoard\Collector\SwitchBoardCollector',
