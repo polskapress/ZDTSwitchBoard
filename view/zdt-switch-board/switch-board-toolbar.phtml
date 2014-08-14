@@ -1,9 +1,12 @@
 <style>
-  label {
+  form[name=zdt_switch_board] label {
     color: #fff;
   }
-
   
+  form[name=zdt_switch_board] input[type=checkbox] {
+    vertical-align: middle;
+  }
+
 </style>
 <div class="zdt-toolbar-entry">
     <div class="zdt-toolbar-preview">
@@ -22,9 +25,9 @@
             <a href="">reload</a>
             <?php foreach ($collector->getSwitches() as $name => $value) { ?>
                 <div>
-                    <label class="zdt-detail-pre">
+                    <label>
                         <input type="checkbox" name="<?php echo $name ?>" <?php echo $value ? 'checked="checked"' : '' ?>>
-                        <?php echo $name ?>
+                        <?php echo $name; ?>
                     </label>
                 </div>
             <?php } ?>
