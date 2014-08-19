@@ -38,52 +38,63 @@
 <script>
 (function () {
     var form = document.querySelector('form[name=zdt_switch_board]'),
-        key = "<?php echo $collector->getCookieKey() ?>";
-
-    form.querySelector('a').addEventListener('click', function() {
-        window.location.reload();
-        return false;
-    });
-
-    form.addEventListener('click', function (event) {
-        if (event.target.tagName !== 'INPUT') {
-            return false;
-        }
-
-        if (!key) {
-            throw new Error('No key provided for ZDTSwitchBoard config');
-        }
-
-        var config = getCookie(key),
-            prop = event.target.name,
-            value = !!event.target.checked;
-
-        config = config ? JSON.parse(config) : {};
-
-        config[prop] = value;
-
-        var now = (new Date()).getTime(),
-            expire = new Date(now + 60 * 60 * 60 * 24).toGMTString();
-
-        var value = [key, '=', JSON.stringify(config), '; expires=', expire, '; path=/'].join('');
-        document.cookie = value;
-
-    }, false);
-
+        key = "<?php echo $collector->getCookieKey() ?>",
+        reloadLink = form.querySelector('a'),
+        markChecked = function(e) {
+            var event = e || window.event,
+                target = event.target || event.srcElement;
+    
+            if (target.tagName !== 'INPUT') {
+                return false;
+            }
+    
+            if (!key) {
+                throw new Error('No key provided for ZDTSwitchBoard config');
+            }
+    
+            var config = getCookie(key),
+                prop = target.name,
+                value = !!target.checked;
+    
+            config = config ? JSON.parse(config) : {};
+    
+            config[prop] = value;
+    
+            var now = (new Date()).getTime(),
+                expire = new Date(now + 60 * 60 * 60 * 24).toGMTString();
+    
+            var value = [key, '=', JSON.stringify(config), '; expires=', expire, '; path=/'].join('');
+            document.cookie = value;
+        };
+    
+    if (typeof form.addEventListener === 'function') {
+        form.addEventListener('click', markChecked, false);
+        reloadLink.addEventListener('click', reload, false);
+    } else {
+        form.attachEvent('onclick', markChecked);
+        reloadLink.attachEvent('onclick', reload);
+    }
+    
     function getCookie(name) {
         var arr = document.cookie.split('; '),
             tmp = {};
-
+    
         for (var i = 0; i < arr.length; i++) {
             var keyvalue = arr[i].split('=');
             tmp[keyvalue[0]] = keyvalue[1];
         }
-
+    
         if (name) {
+            console.info(tmp);
             return tmp[name] || '';
         }
-
+    
         return tmp;
+    }
+    
+    function reload() {
+        window.location.reload(true);
+        return false;
     }
 })();
 </script>
