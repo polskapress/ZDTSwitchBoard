@@ -5,12 +5,10 @@ namespace ZDTSwitchBoard\Collector;
 use ZendDeveloperTools\Collector\CollectorInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Session\Container;
-
 use ZendDeveloperTools\Collector\AbstractCollector;
-
 use Zend\EventManager\EventManager;
-
 use ZDTSwitchBoard\Module;
+use Zend\Console\Request as ConsoleRequest;
 
 class SwitchBoardCollector extends AbstractCollector
 {
@@ -51,8 +49,12 @@ class SwitchBoardCollector extends AbstractCollector
             $this->data = $this->data[Module::CONFIG_KEY];
         }
 
-        $cookies = $request->getCookie();
-
+        if ($request instanceof ConsoleRequest) {
+            $cookies = array();
+        } else {
+            $cookies = $request->getCookie();
+        }
+        
         if (!isset($cookies[$this->cookieKey])) {
             return;
         }
